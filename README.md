@@ -29,10 +29,10 @@ This repository was developed to:
 The repository integrates multiple generations of SM2RAIN:
 
 (1) Original SM2RAIN algorithm proposed by **Lucca Brocca**  
-(2) SM2RAIN-NRT and advanced operational variants  
-(3) SM2RAIN-NSF development versions  
-(4) SM2RAIN-GA (genetic algorithm optimized parameterization)  
-(5) Experimental AI-assisted SM2RAIN extensions (optional modules)
+(2) And advanced operational variants:
+(2-1) SM2RAIN-NSF (Net-Water-Flux version)
+(2-2) SM2RAIN-GA (Green–Ampt Version)  
+(3) Experimental AI-assisted SM2RAIN extensions (optional modules)
 
 Each version is modular and can be selected depending on research or operational needs.
 
