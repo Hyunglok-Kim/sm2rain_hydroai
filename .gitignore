@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# 데이터 (다운로드 원본·산출물은 커밋하지 않음)
+raw/
+output/
+assembled/
+*.nc
+*.hdf5
+*.HDF5
+*.nat
+*.grib
+*.csv
+*.zip
+
+# 인증정보 (절대 커밋 금지)
+.cdsapirc
+.netrc
+*.key
