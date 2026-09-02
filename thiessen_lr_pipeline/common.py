@@ -45,8 +45,10 @@ AWS_HOURLY = str(DATA / 'AWS_hourly_%d.csv')   # 지점 시자료 (연도별)
 FIT_YEAR = '2021'                        # 회귀 적합 연도
 EVAL0, EVAL1 = '2022-01-01', '2025-05-01'   # 평가 구간
 
-#  격자별 회귀(02)의 설명변수.  LightGBM 편의보정과 같은 입력이고 지상관측은 넣지 않는다
-X_GRID = ['SM2RAIN', 'ERA5', 'GPM', 'TCA']
+#  격자별 회귀(02, LR-G)의 설명변수.  LightGBM 편의보정(BC-G)과 같은 입력
+#  구성이다 — 위성·재분석 네 가지에 같은 날 지상관측 격자장(AWS)을 더한다.
+#  목표만 IDW_AWS 에서 티센으로 바뀐다.
+X_GRID = ['SM2RAIN', 'ERA5', 'GPM', 'TCA', 'AWS']
 
 #  유역별 회귀(03)의 설명변수.  이미 편의보정된 BC_G 를 티센에 다시 맞춘다
 X_BASIN = ['BC_G']
@@ -55,7 +57,7 @@ X_BASIN = ['BC_G']
 BC_MAP = {'BC_G': 'BC_2', 'BC': 'BC_1'}
 
 MIN_AREA_FRAC = 0.5      # 유역 유효면적이 이보다 작은 날은 결측으로 둔다
-MIN_FIT = 60             # 적합에 쓸 수 있는 날이 이보다 적으면 그 격자는 비운다
+MIN_FIT = 7              # 계수를 풀 수 있는 최소 표본 (설명변수 5 + 절편 + 1)
 
 
 def need(*paths) -> None:

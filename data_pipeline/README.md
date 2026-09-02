@@ -35,6 +35,11 @@ ASOS/AWS 다운로드가 끝난 뒤 실행하며, SM2RAIN·GPM 과 동일한 0.1
 (ERA5는 시간별 누계라 누계 해제까지 함께 처리한다.)
 지상관측(ASOS, AWS)은 원래 KST 일자료라 추가 처리가 없다.
 
+**검증 기준에 대하여**: IDW_ASOS 는 학습에 쓰지 않으므로 학습 자료로 채점하는
+순환은 피하지만, 96개 종관 지점을 공간보간한 추정장이라 참값이 아니다. 관측이
+희소한 지역에서는 자체 보간오차를 포함하므로, 지표는 참값 대비 오차가 아니라
+이 비교 기준에 대한 재현도로 읽어야 한다.
+
 ## 인증키 설정 (코드에 키를 넣지 않는다)
 
 | 데이터 | 발급처 | 설정 방법 |
@@ -115,7 +120,7 @@ python assemble.py --step merge        # → assembled/ds_merged_LR.nc
 |---|---|
 | `ASCAT_daily_stack_KST.nc` | `01_SM2RAIN.py` 입력 (토양수분) |
 | `Precipitation_IDW_AWS_{YYYY}.nc` | SM2RAIN 보정 목표·TCA 멤버(`da_IDWs`) |
-| `Precipitation_IDW_ASOS_{YYYY}.nc` | 독립 검증 기준 |
+| `Precipitation_IDW_ASOS_{YYYY}.nc` | 비교 검증 기준 (학습에 쓰지 않는다) |
 | `era5_land_P_KST.nc` | `02_TCA.py` 입력 멤버(ERA5) |
 | `GPM_{YYYY}_KST.nc` | `03_BC_LightGBM.py` 입력특징(GPM) |
 

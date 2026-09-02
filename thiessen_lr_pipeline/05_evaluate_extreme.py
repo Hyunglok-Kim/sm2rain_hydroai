@@ -8,9 +8,8 @@
     기준     티센 유역 일강수 (01 산출)
     평가구간 2022-01-01 ~ 2025-05-01
     대상     LR_basin  BC_G 를 유역평균해 티센에 맞춘 회귀   (03)
+             IDW_AWS   지상관측 보간 격자장의 유역평균
              BC_G      LightGBM, 당일 지상관측 입력
-             BC        LightGBM, 지상관측 미사용
-             TCA       편의보정 전 병합장
 
     극한 관점  연 최대일 재현비 · 강우강도 구간별 재현비 · 티센 상위 사상
 
@@ -47,11 +46,10 @@ import xarray as xr
 
 import common as C
 
-PRODS = ['LR_basin', 'BC_G', 'BC', 'TCA']
-LAB = {'LR_basin': 'LR (BC-G 를 티센에 맞춤)', 'BC_G': 'BC-G (지상관측 융합)',
-       'BC': 'BC', 'TCA': 'TCA (보정 전)'}
-COL = {'LR_basin': '#0F7B8A', 'BC_G': '#8E3B46', 'BC': '#D1495B',
-       'TCA': '#EDAE49'}
+PRODS = ['LR_basin', 'IDW_AWS', 'BC_G']
+LAB = {'LR_basin': 'LR (BC-G 를 티센에 맞춤)', 'IDW_AWS': 'IDW_AWS (지상관측 보간)',
+       'BC_G': 'BC-G (지상관측 융합)'}
+COL = {'LR_basin': '#0F7B8A', 'IDW_AWS': '#2E86C1', 'BC_G': '#E08A2E'}
 
 
 def annual_peak(THI, S, prods, order):
@@ -85,7 +83,7 @@ def main() -> None:
 
     ds = xr.open_dataset(C.F_MERGED)
     t = pd.to_datetime(ds.time.values)
-    A = {'TCA': ds['TCA'].values}
+    A = {'IDW_AWS': ds['AWS'].values}
     ds.close()
     d2 = xr.open_dataset(C.F_BC12)
     for name, src in C.BC_MAP.items():

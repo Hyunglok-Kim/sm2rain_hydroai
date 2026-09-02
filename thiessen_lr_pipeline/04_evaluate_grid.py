@@ -7,10 +7,9 @@
 
     기준     티센 유역 일강수 (01 산출)
     평가구간 2022-01-01 ~ 2025-05-01   (적합에 쓴 2021년은 뺀다)
-    대상     LR_grid   격자별 회귀, 목표 티센            (02)
-             BC_G      LightGBM, 당일 지상관측 입력      (03_BC_LightGBM.py 의 BC_2)
-             BC        LightGBM, 지상관측 미사용         (같은 파일의 BC_1)
-             TCA       편의보정 전 병합장                (02_TCA.py)
+    대상     LR_grid   격자별 회귀(LR-G), 목표 티센 — 최종 산출물   (02)
+             IDW_AWS   지상관측 보간 격자장 (조밀한 관측의 참조선)
+             BC_G      LightGBM, 당일 지상관측 입력 (직전 단계 산출물)
 
 유역 시계열 산출물(03)은 여기 넣지 않는다.  격자 자료가 아니고, 극한강우를
 보는 관점이 달라 05 에서 따로 견준다.
@@ -49,11 +48,10 @@ import xarray as xr
 
 import common as C
 
-PRODS = ['LR_grid', 'BC_G', 'BC', 'TCA']
-LAB = {'LR_grid': 'LR (격자별 회귀, 목표 티센)', 'BC_G': 'BC-G (지상관측 융합)',
-       'BC': 'BC', 'TCA': 'TCA (보정 전)'}
-COL = {'LR_grid': '#0F7B8A', 'BC_G': '#8E3B46', 'BC': '#D1495B',
-       'TCA': '#EDAE49'}
+PRODS = ['LR_grid', 'IDW_AWS', 'BC_G']
+LAB = {'LR_grid': 'LR-G (격자별 회귀, 목표 티센)', 'IDW_AWS': 'IDW_AWS (지상관측 보간)',
+       'BC_G': 'BC-G (지상관측 융합)'}
+COL = {'LR_grid': '#C0392B', 'IDW_AWS': '#2E86C1', 'BC_G': '#E08A2E'}
 
 
 def main() -> None:
@@ -63,7 +61,7 @@ def main() -> None:
 
     ds = xr.open_dataset(C.F_MERGED)
     t = pd.to_datetime(ds.time.values)
-    A = {'TCA': ds['TCA'].values}
+    A = {'IDW_AWS': ds['AWS'].values}
     ds.close()
     g = xr.open_dataset(f_grid)
     A['LR_grid'] = g['LR'].values
